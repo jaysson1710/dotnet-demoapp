@@ -28,7 +28,9 @@ jobs:
           args: >
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.verbose=true
-          projectBaseDir: .
+            -Dsonar.projectKey=testgitgub
+            -Dsonar.projectName=testgitgub
+          projectBaseDir: ./src
         env:
           BRANCH: ${{github.event.pull_request.head.ref}}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
