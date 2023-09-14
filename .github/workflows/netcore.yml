@@ -16,6 +16,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    
+    - name: install sonar
+      run: |
+        dotnet tool install --global dotnet-sonarscanner  
+        dotnet sonarscanner begin /k:dotnet-demo3 /n:dotnet-demo3 /d:sonar.login=$SONAR_TOKEN /d:sonar.host.url=$SONAR_HOST_URL /d:sonar.cs.opencover.reportsPaths=**/coverage.opencover.xml /d:sonar.cs.vstest.reportsPaths=**/*.trx /d:sonar.exclusions=**/bin/**,**.json,**/obj/*,**.xml,**/testresult/**
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
@@ -28,19 +37,25 @@ jobs:
     - name: run Test
       run: dotnet test ./tests/tests.csproj --logger trx --results-directory "testresult" --collect "XPlat Code Coverage;Format=opencover" 
       continue-on-error: true
-      
-    - name: Official SonarQube Scan
-      uses: SonarSource/sonarqube-scan-action@v2.0.1
-      with:
-        # Additional arguments to the sonar-scanner
-        args: >
-          -Dsonar.projectKey=dev_test_github
-          -Dsonar.projectName=dev_test_github
-          -Dsonar.cs.opencover.reportsPaths=**/coverage.opencover.xml
-          -Dsonar.cs.vstest.reportsPaths=**/*.trx
-          -Dsonar.exclusions=**/bin/**,**.json,**/obj/*,**.xml,**/testresult/**
-#        projectBaseDir: ./src
+    - name: run analysis sonar
+      run: |
+        dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
       env:
-        #BRANCH: ${{github.event.pull_request.head.ref}}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+#     - name: Official SonarQube Scan
+#       uses: SonarSource/sonarqube-scan-action@v2.0.1
+#       with:
+#         # Additional arguments to the sonar-scanner
+#         args: >
+#           -Dsonar.projectKey=dev_test_github
+#           -Dsonar.projectName=dev_test_github
+#           -Dsonar.cs.opencover.reportsPaths=**/coverage.opencover.xml
+#           -Dsonar.cs.vstest.reportsPaths=**/*.trx
+#           -Dsonar.exclusions=**/bin/**,**.json,**/obj/*,**.xml,**/testresult/**
+# #        projectBaseDir: ./src
+#       env:
+#         #BRANCH: ${{github.event.pull_request.head.ref}}
+#         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}

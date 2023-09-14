@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-
+    <ProjectGuid>34d9acae-d012-4bbf-9e7e-da3e81dac821</ProjectGuid>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 

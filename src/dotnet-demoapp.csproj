@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>DotnetDemoapp</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
-
+    <ProjectGuid>4ca14fcb-0bd5-4333-ac45-8c57a144d472</ProjectGuid>
     <Version>1.5.0</Version>
   </PropertyGroup>
 
