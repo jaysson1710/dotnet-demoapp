@@ -23,7 +23,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore **/*.csproj
     - name: Build
-      run: dotnet build **/*.csproj --no-restore
+      run: dotnet build ./src/dotnet-demoapp.csproj  --no-restore
     - name: Test
       run: dotnet test ./tests/tests.csproj --no-build --logger trx --results-directory "testresult" --collect "XPlat Code Coverage;Format=opencover" 
       continue-on-error: true
