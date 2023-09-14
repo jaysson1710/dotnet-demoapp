@@ -22,11 +22,14 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore ./src/dotnet-demoapp.csproj
-    - name: Restore dependencies test
-      run: dotnet restore ./tests/tests.csproj
     - name: Build
       run: dotnet build ./src/dotnet-demoapp.csproj  --no-restore
-    - name: Test
+    
+    - name: Restore dependencies test
+      run: dotnet restore ./tests/tests.csproj
+    - name: Build test project
+      run: dotnet build ./tests/tests.csproj  --no-restore
+    - name: run Test
       run: dotnet test ./tests/tests.csproj --no-build --logger trx --results-directory "testresult" --collect "XPlat Code Coverage;Format=opencover" 
       continue-on-error: true
       
@@ -42,3 +45,7 @@ jobs:
           -Dsonar.cs.vstest.reportsPaths=**/*.trx
           -Dsonar.exclusions=**/bin/**,**.json,**/obj/*
         projectBaseDir: ./src
+      env:
+        #BRANCH: ${{github.event.pull_request.head.ref}}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
