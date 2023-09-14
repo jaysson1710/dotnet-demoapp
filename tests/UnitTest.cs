@@ -21,4 +21,15 @@ namespace DotnetDemoapp_tests
             Assert.True(result, $"{result} should not be false");
         }
     }
+
+    public class class1Test
+    {
+        [Fact]
+        public void test1()
+        {
+            var instancia = new class1(1);
+
+            Assert.Equal(instancia.numero, 1);
+        }
+    }
 }
