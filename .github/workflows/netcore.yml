@@ -38,7 +38,7 @@ jobs:
           -Dsonar.projectName=dev_test_github
           -Dsonar.cs.opencover.reportsPaths=**/coverage.opencover.xml
           -Dsonar.cs.vstest.reportsPaths=**/*.trx
-          -Dsonar.exclusions=**/bin/**,**.json,**/obj/*
+          -Dsonar.exclusions=**/bin/**,**.json,**/obj/*,**.xml,**/testresult/**
 #        projectBaseDir: ./src
       env:
         #BRANCH: ${{github.event.pull_request.head.ref}}
