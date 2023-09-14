@@ -2,7 +2,7 @@ name: CI Build App
 
 on:
   push:
-    branches: [master]
+    branches: [dev]
     paths:
       - "src/**"
       - "tests/**"
@@ -20,7 +20,21 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v2
-
+      
+      - name: Official SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v2.0.1
+        with:
+          # Additional arguments to the sonar-scanner
+          args: >
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.verbose=true
+          projectBaseDir: .
+        env:
+          BRANCH: ${{github.event.pull_request.head.ref}}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          
+      
       - name: "Run linting"
         # We have to update the path because HOME is set weird in actions runner
         run: export PATH=$PATH:$HOME/.dotnet/tools && make lint
