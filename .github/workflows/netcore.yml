@@ -58,7 +58,7 @@ jobs:
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
-        access-token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Autobuild
       uses: github/codeql-action/autobuild@v2
