@@ -13,7 +13,10 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['csharp']
     steps:
     - uses: actions/checkout@v3
     
@@ -43,7 +46,24 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    - name: publish
+      run: dotnet publish ./src/dotnet-demoapp.csproj -c Release -o ./publish
+      
+    - uses: actions/upload-artifact@v3
+      with:
+        name: drop
+        path: ./publish/
+        
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: ${{ matrix.language }}
 
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v1
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1
 #     - name: Official SonarQube Scan
 #       uses: SonarSource/sonarqube-scan-action@v2.0.1
 #       with:
